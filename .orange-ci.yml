@@ -1,0 +1,45 @@
+.docker_common: &docker_common
+  runner:
+    network: devnet
+  services:
+    - docker
+  envFrom: https://git.woa.com/tam/aegis-secret/blob/master/AEGIS_DOCKER_ENV.txt
+
+.artifact_build: &artifact_build
+  # 安装依赖包
+  - name: install
+    script: npm install -D
+  # 实现构建生成发布文件
+  - name: build
+    script: npm run build
+
+docker-login: &docker-login
+  - name: Docker login for image
+    script: docker login -u $TCR_USER1 -p $TCR_PWD1 ccr.ccs.tencentyun.com
+
+docker-tag-prod: &docker-tag
+  - name: Create DOCKER_TIME_TAG
+    script: echo -n ccr.ccs.tencentyun.com/qcbm-demo/qcbm-web:$(date "+%Y%m%d%H%M")
+    exports:
+      info: DOCKER_TIME_TAG
+
+docker-build: &docker-build
+  - name: Docker build for ccr.ccs.tencentyun.com
+    script: docker build --network=host -t ${DOCKER_TIME_TAG} ./
+
+docker-push: &docker-push
+  - name: docker push for ccr.ccs.tencentyun.com
+    script:
+      - docker push ${DOCKER_TIME_TAG}
+
+
+main:
+  # 监听 push 动作
+  push:
+    - <<: *docker_common
+      stages:
+        - *artifact_build
+        - *docker-login
+        - *docker-tag
+        - *docker-build
+        - *docker-push
