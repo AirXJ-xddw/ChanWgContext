@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="WebServers">
+    <option name="servers">
+      <webServer id="0f706150-825f-4e82-a244-a6237f8c3e73" name="MyDevCloud">
+        <fileTransfer rootFolder="/data/home/daixuwang" accessType="SFTP" host="9.134.13.207" port="36000" sshConfigId="d02491cc-aba8-403b-95a2-c90578d5fd5a" sshConfig="daixuwang@9.134.13.207:36000 agent" authAgent="true">
+          <advancedOptions>
+            <advancedOptions dataProtectionLevel="Private" keepAliveTimeout="0" passiveMode="true" shareSSLContext="true" />
+          </advancedOptions>
+        </fileTransfer>
+      </webServer>
+    </option>
+  </component>
+</project>
